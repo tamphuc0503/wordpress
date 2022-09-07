@@ -1,0 +1,14 @@
+{
+    "require": {
+        "symfony/dotenv": "^5.4",
+        "bugsnag/bugsnag": "^3.28"
+    },
+    "extra": {
+        "preserve-paths": [
+            "wordpress/robots.txt",
+            "wordpress/wp-config.php",
+            "wordpress/wp-content/themes/*",
+            "wordpress/wp-content/plugins/perfmatters"
+        ]
+    }
+}

@@ -1,0 +1,44 @@
+version: '3.3'
+services:
+  wordpress:
+    image: aprilsea/as:wordpress.6.0.0
+    restart: always
+    deploy:
+      replicas: 1
+    ports:
+     - 8000:80
+    depends_on:
+     - maria
+     - redis
+    environment:
+     - WORDPRESS_ENV=${WORDPRESS_ENV}
+     - DB_NAME=${DB_NAME}
+     - DB_USER=${DB_USER}
+     - DB_PASSWORD=${DB_PASSWORD}
+     - DB_HOST=maria:${DB_PORT}
+    volumes:
+     - /home/data/wp/uploads:/wordpress/wp-content/uploads
+  redis:
+    image: "redis:alpine"
+    container_name: redis_wp
+    #command: redis-server --requirepass 123456
+    ports:
+     - "6380:6380"
+    volumes:
+     - /home/data/redis:/var/lib/redis
+  maria:
+    image: mariadb:10.2
+    container_name: mariadb_wp
+    restart: always
+    ports:
+     - ${DB_PORT}:3306
+    environment:
+      - MYSQL_ROOT_PASSWORD=${DB_ROOT_PASSWORD}
+      - MYSQL_USER=${DB_USER}
+      - MYSQL_PASSWORD=${DB_PASSWORD}
+      - MYSQL_DATABASE=${DB_NAME}
+      # - MYSQL_TCP_PORT=${DB_PORT}
+      # - MYSQL_UNIX_PORT=${DB_PORT}
+    volumes:
+      - /home/data/mysql:/var/lib/mysql
+    command: mysqld --max-connections=20

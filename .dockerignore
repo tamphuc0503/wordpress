@@ -1,0 +1,10 @@
+.git
+.gitignore
+.env*
+Dockerfile
+docker-compose.yaml
+xmlrpc.php
+/vendor
+/node_modules
+/.idea
+/wordpress/public/wp-content/uploads
