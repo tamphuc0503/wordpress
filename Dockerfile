@@ -17,6 +17,8 @@ COPY . .
 COPY composer.json composer.lock /wordpress/
 RUN composer install --no-interaction --no-autoloader --no-scripts
 
+RUN apt-get update  -y
+RUN apt-get install -y nano
 # Permissions
 RUN find /wordpress/ -exec chmod 555 {} \;
 RUN mkdir /wordpress/wp-content/uploads && chmod 777 -R /wordpress/wp-content/uploads
