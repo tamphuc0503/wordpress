@@ -6,9 +6,9 @@ RUN apt-get update --quiet && apt-get install -y --quiet unzip && rm -rf /var/li
 
 # install php gd extension
 RUN apt-get update --quiet && \
-apt-get install -y --quiet libfreetype6-dev libjpeg62-turbo-dev libpng-dev && \
-docker-php-ext-configure gd --with-freetype=/usr/include/ --with-jpeg=/usr/include/ && \
-docker-php-ext-install gd 
+    apt-get install -y --quiet dialog apt-utils libfreetype6-dev libjpeg62-turbo-dev libpng-dev && \
+    docker-php-ext-configure gd --with-freetype=/usr/include/ --with-jpeg=/usr/include/ && \
+    docker-php-ext-install gd 
 
 WORKDIR /wordpress
 

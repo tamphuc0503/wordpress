@@ -41,4 +41,4 @@ services:
       # - MYSQL_UNIX_PORT=${DB_PORT}
     volumes:
       - /home/data/mysql:/var/lib/mysql
-    command: mysqld --max-connections=20
+    command: mysqld --max-connections=128
