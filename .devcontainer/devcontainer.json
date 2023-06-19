@@ -5,8 +5,6 @@
     "name": "wordpress",
     "dockerComposeFile": "docker-compose.yml",
     "service": "wordpress",
-    // The optional 'workspaceFolder' property is the path VS Code should open by default when
-    // connected. This is typically a file mount in .devcontainer/docker-compose.yml
     "workspaceFolder": "/var/www/html",
     "customizations": {
         "vscode": {
@@ -25,9 +23,10 @@
             ]
         }
     },
-    "initializeCommand": "sudo mkdir -p ./data",
-    "postStartCommand": "composer install --no-interaction --no-autoloader --no-scripts",
-    "shutdownAction": "stopCompose"
+    "initializeCommand": "docker container prune -f && docker image prune -f",
+    "postStartCommand": "composer install --no-interaction --no-autoloader --no-scripts && git config --global --add safe.directory .",
+    "shutdownAction": "stopCompose",
+    "postAttachCommand": "git config --global --add safe.directory /var/www/html"
     // "postCreateCommand": "/var/www/html/wp-content/plugins/plugin-dev/.devcontainer/wp-setup.sh",
     // Uncomment to connect as a non-root user. See https://aka.ms/vscode-remote/containers/non-root.
     // "remoteUser": "vscode"
