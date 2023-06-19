@@ -43,8 +43,10 @@ define('DB_CHARSET', 'utf8');
 /** The database collate type. Don't change this if in doubt. */
 define('DB_COLLATE', '');
 
-define('MULTISITE', true);
+define('MULTISITE', false);
 
+/** Allow to upload themes/plugin directly. */
+define('FS_METHOD', 'direct');
 
 /**#@+
  * Authentication unique keys and salts.
@@ -57,14 +59,14 @@ define('MULTISITE', true);
  *
  * @since 2.6.0
  */
-define('AUTH_KEY',         '&d~aWMk|3r]/v6.r]A4zoZWi+/pUuYai]NmGi|h9lLi9c7I)i|`2XpW<x|wfOZ6w');
-define('SECURE_AUTH_KEY',  ' tK98T^LQw|hiN)r/Ly/5Kb88*qnye~Y>^FH<]9N]ah6v6ce0>nWIV#`.wl=YdQ.');
-define('LOGGED_IN_KEY',    '@[tc}|Dw&EJrXh2k1OGz=-LH($d=t-0M /S9A1`Du}vfaeUv-N#|+x(oJb?=F47&');
-define('NONCE_KEY',        'F?$RjV+A7}.OH z;k.>-)<0|*tol%#;JE2e^&T5VtJ<Yb75:=vgU;r&?i+Ip~(%i');
-define('AUTH_SALT',        'U-:>iy]SnZOe:[9au)OwBq`[B3sAX=>KdPP7cC[6$;$CM1tYcL Ox@VVxiO$h|@e');
-define('SECURE_AUTH_SALT', '&InVKp|?(M$I1Ng.,KndV1^~gg=?:`@=|me&O8Ic^Bm{E8bmWNmi1R`15|na:4sa');
-define('LOGGED_IN_SALT',   '@Ja|-RDjQ..s+[h6[6E[f&o=qWF.kBwJfbEcs#rg7L^-m^@KAf;k(|v/b&B~i5Ff');
-define('NONCE_SALT',       'K(o@jKRn@/mSW~j)X(>$/+N46PnSlXg/t*o_8x@*Dp,Ef9YKX+@l+pj)9H?q,z5%');
+define('AUTH_KEY', $ENV['AUTH_KEY'] ?? '&d~aWMk|3r]/v6.r]A4zoZWi+/pUuYai]NmGi|h9lLi9c7I)i|`2XpW<x|wfOZ6w');
+define('SECURE_AUTH_KEY', $ENV['SECURE_AUTH_KEY'] ?? ' tK98T^LQw|hiN)r/Ly/5Kb88*qnye~Y>^FH<]9N]ah6v6ce0>nWIV#`.wl=YdQ.');
+define('LOGGED_IN_KEY', $ENV['LOGGED_IN_KEY'] ??  '@[tc}|Dw&EJrXh2k1OGz=-LH($d=t-0M /S9A1`Du}vfaeUv-N#|+x(oJb?=F47&');
+define('NONCE_KEY', $ENV['NONCE_KEY'] ??  'F?$RjV+A7}.OH z;k.>-)<0|*tol%#;JE2e^&T5VtJ<Yb75:=vgU;r&?i+Ip~(%i');
+define('AUTH_SALT', $ENV['AUTH_SALT'] ??  'U-:>iy]SnZOe:[9au)OwBq`[B3sAX=>KdPP7cC[6$;$CM1tYcL Ox@VVxiO$h|@e');
+define('SECURE_AUTH_SALT', $ENV['SECURE_AUTH_SALT'] ?? '&InVKp|?(M$I1Ng.,KndV1^~gg=?:`@=|me&O8Ic^Bm{E8bmWNmi1R`15|na:4sa');
+define('LOGGED_IN_SALT', $ENV['LOGGED_IN_SALT'] ?? '@Ja|-RDjQ..s+[h6[6E[f&o=qWF.kBwJfbEcs#rg7L^-m^@KAf;k(|v/b&B~i5Ff');
+define('NONCE_SALT', $ENV['NONCE_SALT'] ??  'K(o@jKRn@/mSW~j)X(>$/+N46PnSlXg/t*o_8x@*Dp,Ef9YKX+@l+pj)9H?q,z5%');
 
 /**#@-*/
 
@@ -88,11 +90,9 @@ $table_prefix = 'wp_';
  *
  * @link https://wordpress.org/support/article/debugging-in-wordpress/
  */
-define('WP_DEBUG', false);
+define('WP_DEBUG', true);
 
 /* Add any custom values between this line and the "stop editing" line. */
-
-
 
 /* That's all, stop editing! Happy publishing. */
 
