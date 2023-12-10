@@ -21,7 +21,7 @@ RUN apt-get update  -y
 RUN apt-get install -y nano git net-tools telnet
 
 # Add xDebug
-RUN pecl install xdebug-2.8.1 \
+RUN pecl install xdebug-3.1.0 \
 	  && docker-php-ext-enable xdebug
 
 #add vscode user
