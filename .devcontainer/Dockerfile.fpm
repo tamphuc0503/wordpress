@@ -1,0 +1,51 @@
+FROM ubuntu:22.04
+
+WORKDIR /app
+
+ARG XDEBUG_PORT=9003
+ARG PHP_VERSION=8.1
+
+ENV XDEBUG_PORT $XDEBUG_PORT
+ENV PHP_VERSION $PHP_VERSION
+ENV DEBIAN_FRONTEND=noninteractive
+
+RUN apt-get update
+RUN apt-get upgrade -y
+RUN apt-get install -y software-properties-common
+RUN apt-get install -y language-pack-en-base
+RUN LC_ALL=en_US.UTF-8 add-apt-repository ppa:ondrej/php
+RUN apt-get update && apt-get install -y zip vim curl wget nano net-tools telnet git
+
+# Install nginx
+RUN apt-key adv --recv-keys --keyserver hkp://keyserver.ubuntu.com 00A6F0A3C300EE8C
+RUN apt-get update && apt-get install -y nginx
+
+COPY nginx.conf /etc/nginx/sites-available/default
+
+# Install modules by PHP_VERSION
+RUN apt-get install -y php$PHP_VERSION php$PHP_VERSION-cli php$PHP_VERSION-fpm
+# RUN apt-get install -y php$PHP_VERSION-gd php$PHP_VERSION-mysql
+# RUN apt-get install -y php$PHP_VERSION-readline php$PHP_VERSION-mbstring
+# RUN apt-get install -y php$PHP_VERSION-dom php$PHP_VERSION-curl
+# RUN apt-get install -y php$PHP_VERSION-zip php$PHP_VERSION-redis php$PHP_VERSION-memcached
+# RUN apt-get install -y php$PHP_VERSION-bcmath php$PHP_VERSION-bz2 php$PHP_VERSION-gmp php$PHP_VERSION-mongo php$PHP_VERSION-intl php$PHP_VERSION-soap php${PHP_VERSION}-amqp php${PHP_VERSION}-tidy
+# RUN apt-get install -y php$PHP_VERSION-mcrypt
+# from php8+, we don't need php-json
+RUN if [[ -ne "8.1" ]] ; then apt-get install -y php$PHP_VERSION-json; fi
+
+RUN service php$PHP_VERSION-fpm start
+
+# enable FPM to read $_ENV or getenv
+RUN echo "clear_env = no" > /etc/php/8.1/fpm/pool.d/www.conf 
+
+RUN git config --global --add safe.directory /app
+
+# Add xDebug
+RUN apt-get install -y php${PHP_VERSION}-xdebug
+
+# Add Xdebug to PHP configuration for xdebug 3
+RUN echo "" >> /etc/php/$PHP_VERSION/mods-available/xdebug.ini \
+ && echo "xdebug.mode=debug,develop" >> /etc/php/$PHP_VERSION/mods-available/xdebug.ini \
+ && echo "xdebug.start_with_request=yes" >> /etc/php/$PHP_VERSION/mods-available/xdebug.ini \
+ && echo "xdebug.client_port=$XDEBUG_PORT" >> /etc/php/$PHP_VERSION/mods-available/xdebug.ini \
+ && echo "xdebug.client_host=0.0.0.0" >> /etc/php/$PHP_VERSION/mods-available/xdebug.ini

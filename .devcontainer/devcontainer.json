@@ -5,7 +5,7 @@
     "name": "wordpress",
     "dockerComposeFile": "docker-compose.yml",
     "service": "wordpress",
-    "workspaceFolder": "/var/www/html",
+    "workspaceFolder": "/app",
     "customizations": {
         "vscode": {
             "settings": {

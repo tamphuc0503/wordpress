@@ -1,0 +1,60 @@
+FROM php:8.1-apache
+RUN apt-get update --quiet && apt-get install -y --quiet unzip && rm -rf /var/lib/apt/lists/* \
+ && a2enmod rewrite && a2enmod headers \
+ && docker-php-ext-install mysqli opcache \
+ && curl -sS https://getcomposer.org/installer | php && mv composer.phar /usr/local/bin/composer
+
+ARG PHP_VERSION=8.1
+ENV PHP_VERSION $PHP_VERSION
+
+RUN apt-get update  -y
+RUN apt-get install -y nano git net-tools telnet
+
+# install php gd extension
+RUN apt-get update  --quiet && \
+    apt-get install -y --quiet  apt-utils libfreetype6-dev libjpeg62-turbo-dev libpng-dev && \
+    docker-php-ext-configure gd --with-freetype=/usr/include/ --with-jpeg=/usr/include/ && \
+    docker-php-ext-install gd 
+
+# RUN docker-php-ext-install -y memcached
+
+# RUN docker-php-ext-install -y cli
+# RUN docker-php-ext-install -y gd mysql
+# RUN docker-php-ext-install -y readline mbstring
+# RUN docker-php-ext-install -y dom curl
+# RUN docker-php-ext-install -y zip redis memcached
+# RUN docker-php-ext-install -y bcmath bz2 gmp mongo intl soap amqp tidy
+# RUN docker-php-ext-install -y mcrypt
+
+# RUN apt-get install -y php$PHP_VERSION php$PHP_VERSION-cli php$PHP_VERSION-fpm
+# RUN apt-get install -y php$PHP_VERSION-gd php$PHP_VERSION-mysql
+# RUN apt-get install -y php$PHP_VERSION-readline php$PHP_VERSION-mbstring
+# RUN apt-get install -y php$PHP_VERSION-dom php$PHP_VERSION-curl
+# RUN apt-get install -y php$PHP_VERSION-zip php$PHP_VERSION-redis php$PHP_VERSION-memcached
+# RUN apt-get install -y php$PHP_VERSION-bcmath php$PHP_VERSION-bz2 php$PHP_VERSION-gmp php$PHP_VERSION-mongo php$PHP_VERSION-intl php$PHP_VERSION-soap php${PHP_VERSION}-amqp php${PHP_VERSION}-tidy
+# RUN apt-get install -y php$PHP_VERSION-mcrypt
+# RUN apt-get install -y php$PHP_VERSION-zip php$PHP_VERSION-redis php$PHP_VERSION-memcached
+
+# add vscode user
+# RUN useradd -ms /bin/bash vscode \
+# 		&& usermod -aG www-data vscode
+
+WORKDIR /var/www/html
+
+USER root
+RUN chown -R www-data:www-data /var/www/html/
+RUN chmod g+w -R /var/www/html/
+
+# Permissions
+# RUN find /var/www/html/ -exec chmod 555 {} \;
+# RUN mkdir /var/www/html/wp-content/uploads && chmod 777 -R /var/www/html/wp-content/uploads
+# RUN mkdir /var/www/html/wp-content/themes/cache && chmod 777 -R /var/www/html/wp-content/themes/cache
+
+# Change DOCUMENT_ROOT
+ENV APACHE_DOCUMENT_ROOT /var/www/html/
+RUN ls -al /etc/apache2/sites-available/
+
+RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/*.conf
+RUN sed -ri -e 's!/var/www/!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/apache2.conf /etc/apache2/conf-available/*.conf
+COPY php.ini /usr/local/etc/php/php.ini
+COPY apache.conf /etc/apache2/sites-available/000-default.conf

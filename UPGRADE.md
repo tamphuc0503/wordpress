@@ -1,3 +1,10 @@
+# Devcontainer
+## Build base container:
+- Go to [.devcontainer](./.devcontainer)
+- Run command ```docker build -f Dockerfile -t aprilsea/wordpress .``` to build your wordpress image.
+- Note: you can change your PHP VERSION to make sure we have enough library.
+## Using aprilsea/wordpress
+
 # Install locally
 - create .env
 - create public/wp-config.php

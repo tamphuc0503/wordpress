@@ -4,6 +4,7 @@ services:
     build: 
       context: ../
       dockerfile: ./.devcontainer/Dockerfile
+    # image: docker.io/aprilsea/wordpress
     ports:
       - 8080:80
     depends_on:
@@ -18,10 +19,11 @@ services:
       MULTISITE: "false"
       WP_SITEURL: http://localhost:8080/
       WP_HOME: http://localhost:8080/
+    command: sleep infinity
     links:
       - db
     volumes:
-      - ../:/var/www/html
+      - ../:/app
  
   db:
     image: mariadb:10
