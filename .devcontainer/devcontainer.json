@@ -19,7 +19,8 @@
             "extensions": [
                 "xdebug.php-debug",
                 "bmewburn.vscode-intelephense-client",
-                "xdebug.php-pack"
+                "xdebug.php-pack",
+                "devsense.phptools-vscode"
             ]
         }
     },

@@ -18,7 +18,10 @@
  *
  * @package WordPress
  */
-define('WORDPRESS_ENV', $_ENV['WORDPRESS_ENV']);
+
+require_once __DIR__ . '/wp-custom/wp-env.php';
+
+// define('WORDPRESS_ENV', $_ENV['WORDPRESS_ENV']);
 
 define('WP_HOME', $_ENV['WP_HOME']);
 

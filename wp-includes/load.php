@@ -457,7 +457,7 @@ function wp_debug_mode() {
 	}
 
 	if ( WP_DEBUG ) {
-		error_reporting( E_ALL );
+		error_reporting( E_ERROR );
 
 		if ( WP_DEBUG_DISPLAY ) {
 			ini_set( 'display_errors', 1 );

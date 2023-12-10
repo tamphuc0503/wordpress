@@ -37,3 +37,8 @@
     - /opt/remi
 ## Install from pecl
 - /opt/remi/php81/root/usr/bin/pecl -d php_suffix=8.1 install mongodb
+
+# Issues:
+## Unable to read env
+- WP cannot read $_ENV or getenv because FPM will clear env by default
+- Need to /etc/php/

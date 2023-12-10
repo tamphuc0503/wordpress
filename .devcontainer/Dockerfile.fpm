@@ -24,19 +24,19 @@ COPY nginx.conf /etc/nginx/sites-available/default
 
 # Install modules by PHP_VERSION
 RUN apt-get install -y php$PHP_VERSION php$PHP_VERSION-cli php$PHP_VERSION-fpm
-# RUN apt-get install -y php$PHP_VERSION-gd php$PHP_VERSION-mysql
+RUN apt-get install -y php$PHP_VERSION-gd php$PHP_VERSION-mysql
 # RUN apt-get install -y php$PHP_VERSION-readline php$PHP_VERSION-mbstring
-# RUN apt-get install -y php$PHP_VERSION-dom php$PHP_VERSION-curl
-# RUN apt-get install -y php$PHP_VERSION-zip php$PHP_VERSION-redis php$PHP_VERSION-memcached
+RUN apt-get install -y php$PHP_VERSION-dom php$PHP_VERSION-curl
+RUN apt-get install -y php$PHP_VERSION-zip php$PHP_VERSION-redis php$PHP_VERSION-memcached
 # RUN apt-get install -y php$PHP_VERSION-bcmath php$PHP_VERSION-bz2 php$PHP_VERSION-gmp php$PHP_VERSION-mongo php$PHP_VERSION-intl php$PHP_VERSION-soap php${PHP_VERSION}-amqp php${PHP_VERSION}-tidy
-# RUN apt-get install -y php$PHP_VERSION-mcrypt
+RUN apt-get install -y php$PHP_VERSION-mcrypt
 # from php8+, we don't need php-json
 RUN if [[ -ne "8.1" ]] ; then apt-get install -y php$PHP_VERSION-json; fi
 
 RUN service php$PHP_VERSION-fpm start
 
 # enable FPM to read $_ENV or getenv
-RUN echo "clear_env = no" > /etc/php/8.1/fpm/pool.d/www.conf 
+RUN echo "clear_env = no" >> /etc/php/$PHP_VERSION/fpm/pool.d/www.conf 
 
 RUN git config --global --add safe.directory /app
 
