@@ -42,3 +42,7 @@
 ## Unable to read env
 - WP cannot read $_ENV or getenv because FPM will clear env by default
 - Need to /etc/php/
+
+# Plugins and themes:
+## Uploads
+- All manually installation (themes, plugins...) will be uploaded to ./wp-content/uploads folder so that , the folder should be changed permissions to 755

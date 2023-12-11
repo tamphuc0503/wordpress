@@ -27,6 +27,8 @@ define('WP_HOME', $_ENV['WP_HOME']);
 
 define('WP_SITEURL', $_ENV['WP_SITEURL']);
 
+define('WP_REDIS_HOST', 'redis');
+
 // ** Database settings - You can get this info from your web host ** //
 /** The name of the database for WordPress */
 define('DB_NAME', $_ENV['DB_NAME']);

@@ -24,3 +24,4 @@ node_modules/
 vendor
 .env*
 .devcontainer/data
+.devcontainer/data_redis

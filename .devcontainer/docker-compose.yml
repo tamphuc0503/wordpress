@@ -9,6 +9,7 @@ services:
       - 8080:80
     depends_on:
       - db
+      - redis
     environment:
       DB_HOST: db
       DB_USER: wp_user
@@ -22,9 +23,17 @@ services:
     command: sleep infinity
     links:
       - db
+      - redis
     volumes:
       - ../:/app
- 
+  redis:
+    image: 'redis'
+    # container_name: redis
+    # hostname: redis
+    # ports:
+    #   - '6379:6379'
+    volumes:
+      - ./data_redis:/data      
   db:
     image: mariadb:10
     environment:
