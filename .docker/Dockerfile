@@ -1,37 +1,25 @@
-FROM php:7.4-apache
-RUN apt-get update --quiet && apt-get install -y --quiet unzip && rm -rf /var/lib/apt/lists/* \
- && a2enmod rewrite && a2enmod headers \
- && docker-php-ext-install mysqli opcache \
- && curl -sS https://getcomposer.org/installer | php && mv composer.phar /usr/local/bin/composer
+# FROM php:8.1-apache
+FROM docker.io/aprilsea/php:8.1-apache
 
-# install php gd extension
-RUN apt-get update --quiet && \
-    apt-get install -y --quiet dialog apt-utils libfreetype6-dev libjpeg62-turbo-dev libpng-dev && \
-    docker-php-ext-configure gd --with-freetype=/usr/include/ --with-jpeg=/usr/include/ && \
-    docker-php-ext-install gd 
-
-WORKDIR /wordpress
+WORKDIR /var/www/html
 
 COPY . . 
 
-COPY composer.json composer.lock /wordpress/
-RUN composer install --no-interaction --no-autoloader --no-scripts
+USER root
+RUN chown -R www-data:www-data /var/www/html/
+RUN chmod g+w -R /var/www/html/
 
-RUN apt-get update  -y
-RUN apt-get install -y nano
+RUN composer install --no-interaction
+
 # Permissions
-RUN find /wordpress/ -exec chmod 555 {} \;
-RUN mkdir /wordpress/wp-content/uploads && chmod 777 -R /wordpress/wp-content/uploads
-RUN mkdir /wordpress/wp-content/themes/cache && chmod 777 -R /wordpress/wp-content/themes/cache
+RUN find /var/www/html/ -exec chmod 555 {} \;
+RUN mkdir /var/www/html/wp-content/uploads && chmod 777 -R /var/www/html/wp-content/uploads
+RUN mkdir /var/www/html/wp-content/themes/cache && chmod 777 -R /var/www/html/wp-content/themes/cache
 
 # Change DOCUMENT_ROOT
-ENV APACHE_DOCUMENT_ROOT /wordpress/
-RUN ls -al /etc/apache2/sites-available/
+ENV APACHE_DOCUMENT_ROOT /var/www/html/
 
 RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/*.conf
 RUN sed -ri -e 's!/var/www/!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/apache2.conf /etc/apache2/conf-available/*.conf
 COPY php.ini /usr/local/etc/php/php.ini
 COPY apache.conf /etc/apache2/sites-available/000-default.conf
-
-RUN cat /etc/apache2/sites-available/000-default.conf
-RUN cat /etc/apache2/apache2.conf

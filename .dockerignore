@@ -3,7 +3,9 @@
 .env*
 Dockerfile
 docker-compose.yaml
-# .devcontainer
+/.docker
+.dockerignore
+/.devcontainer
 xmlrpc.php
 /vendor
 /node_modules
