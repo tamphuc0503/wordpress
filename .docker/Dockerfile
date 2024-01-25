@@ -24,6 +24,11 @@ RUN chown -R www-data:www-data /var/www/html/
 RUN chmod g+w -R /var/www/html/
 
 RUN composer install --no-interaction
+USER root
+RUN chown -R www-data:www-data /var/www/html/
+RUN chmod g+w -R /var/www/html/
+
+RUN composer install --no-interaction
 
 # Permissions
 RUN find /var/www/html/ -exec chmod 555 {} \;
