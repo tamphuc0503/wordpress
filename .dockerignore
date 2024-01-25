@@ -3,9 +3,11 @@
 .env*
 Dockerfile
 docker-compose.yaml
-# .devcontainer
+.devcontainer
+.vscode
+./vendor
+.docker
+.dockerignore
 xmlrpc.php
-/vendor
-/node_modules
-/.idea
-/wordpress/public/wp-content/uploads
+./wp-content/uploads
+*.md
