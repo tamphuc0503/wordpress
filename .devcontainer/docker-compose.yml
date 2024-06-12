@@ -1,10 +1,10 @@
 version: '3'
 services:
   wordpress:
-    build: 
-      context: ../
-      dockerfile: ./.devcontainer/Dockerfile
-    # image: docker.io/aprilsea/wordpress
+    # build: 
+    #   context: ../
+    #   dockerfile: ./.devcontainer/Dockerfile
+    image: docker.io/aprilsea/wordpress.apache    
     ports:
       - 8080:80
     depends_on:
@@ -18,9 +18,9 @@ services:
       WP_DEBUG: "true"
       WP_ADMIN: "true"
       MULTISITE: "false"
-      WP_SITEURL: http://localhost:8080/
-      WP_HOME: http://localhost:8080/
-    command: sleep infinity
+      WP_SITEURL: http://localhost:8080
+      WP_HOME: http://localhost:8080
+    # command: sleep infinity
     links:
       - db
       - redis
