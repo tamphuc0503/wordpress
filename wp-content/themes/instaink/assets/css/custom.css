@@ -1,0 +1,19 @@
+.article-result-body h2 {
+    font-size: 1.125rem;
+    line-height: 1.375;
+    font-weight: 700;
+}
+
+.rotating-animation {
+	width: 64px;
+	height: 64px;
+    animation: spin 2s linear infinite; /* Gắn animation */
+}
+@keyframes spin {
+    from {
+        transform: rotate(0deg); /* Bắt đầu từ góc 0 */
+    }
+    to {
+        transform: rotate(360deg); /* Kết thúc ở góc 360 */
+    }
+}

@@ -13,10 +13,5 @@
  */
 define( 'WP_USE_THEMES', true );
 
-try {
-    require __DIR__ . '/wp-blog-header.php';
-    //code...
-} catch (\Throwable $th) {
-    throw $th;
-}
 /** Loads the WordPress Environment and Template */
+require __DIR__ . '/wp-blog-header.php';

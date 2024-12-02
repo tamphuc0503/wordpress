@@ -1,46 +1,35 @@
 version: '3'
 services:
   wordpress:
-    # build: 
-    #   context: ../
-    #   dockerfile: ./.devcontainer/Dockerfile
-    image: docker.io/aprilsea/wordpress.apache    
+    build: 
+      context: ../
+      dockerfile: ./.docker/Dockerfile  
+    image: docker.io/aprilsea/chang-ai:wordpress.xdebug 
     ports:
       - 8080:80
-    depends_on:
-      - db
-      - redis
     environment:
+      # DB_HOST: s3.topdev.app:17297
       DB_HOST: db
-      DB_USER: wp_user
-      DB_PASSWORD: wp_pass
+      DB_USER: avnadmin
+      DB_PASSWORD: 
       DB_NAME: wordpress
       WP_DEBUG: "true"
       WP_ADMIN: "true"
       MULTISITE: "false"
       WP_SITEURL: http://localhost:8080
       WP_HOME: http://localhost:8080
-    # command: sleep infinity
     links:
       - db
-      - redis
     volumes:
       - ../:/app
-  redis:
-    image: 'redis'
-    # container_name: redis
-    # hostname: redis
-    # ports:
-    #   - '6379:6379'
-    volumes:
-      - ./data_redis:/data      
   db:
     image: mariadb:10
+    restart: always
     environment:
       MYSQL_DATABASE: wordpress
-      MYSQL_USER: wp_user
-      MYSQL_PASSWORD: wp_pass
-      MYSQL_RANDOM_ROOT_PASSWORD: '1'
+      MYSQL_USER: avnadmin
+      MYSQL_PASSWORD: 
+      MYSQL_ROOT_PASSWORD: 
     ports:
       - 3306:3306
     volumes:

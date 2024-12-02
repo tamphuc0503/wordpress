@@ -1,45 +1,45 @@
-FROM php:8.1-apache
+FROM docker.io/aprilsea/chang-ai:wordpress.base
 
-RUN apt-get update --quiet && apt-get install -y --quiet unzip && rm -rf /var/lib/apt/lists/* \
- && a2enmod rewrite && a2enmod headers \
- && docker-php-ext-install mysqli opcache \
- && curl -sS https://getcomposer.org/installer | php && mv composer.phar /usr/local/bin/composer
+WORKDIR /app
 
-ARG PHP_VERSION=8.1
-ENV PHP_VERSION $PHP_VERSION
-
-RUN apt-get update  -y
-RUN apt-get install -y nano git net-tools telnet
-
-RUN apt-get update  --quiet && \
-    apt-get install -y --quiet  apt-utils libfreetype6-dev libjpeg62-turbo-dev libpng-dev && \
-    docker-php-ext-configure gd --with-freetype=/usr/include/ --with-jpeg=/usr/include/ && \
-    docker-php-ext-install gd 
-
-WORKDIR /var/www/html
 COPY . .
 
-USER root
-RUN chown -R www-data:www-data /var/www/html/
-RUN chmod g+w -R /var/www/html/
-
-RUN composer install --no-interaction
-USER root
-RUN chown -R www-data:www-data /var/www/html/
-RUN chmod g+w -R /var/www/html/
-
 RUN composer install --no-interaction
 
+#RUN chown -R www-data:www-data /app/
+#RUN chmod g+w -R /app/
+
+# install php gd extension
+RUN apt-get install -y --quiet apt-utils libfreetype6-dev libjpeg62-turbo-dev libpng-dev && \
+    docker-php-ext-configure gd --with-freetype=/usr/include/ --with-jpeg=/usr/include/ && \
+    docker-php-ext-install gd 
+    
+# install php zip extension
+RUN apt-get install -y --quiet libzip-dev zip && \
+    docker-php-ext-install zip
+
+
+# ARG XDEBUG_VERSION="xdebug"
+# # install xdebug. when deploying, should comment these line
+# RUN yes | pecl install ${XDEBUG_VERSION} \
+#     && echo "zend_extension=$(find /usr/local/lib/php/extensions/ -name xdebug.so)" > /usr/local/etc/php/conf.d/xdebug.ini \
+#     && echo "xdebug.mode=debug" >> /usr/local/etc/php/conf.d/xdebug.ini \
+#     && echo "xdebug.start_with_request=yes" >> /usr/local/etc/php/conf.d/xdebug.ini \
+#     && echo "xdebug.client_host=0.0.0.0" >> /usr/local/etc/php/conf.d/xdebug.ini \
+#     && echo "xdebug.client_port=9003" >> /usr/local/etc/php/conf.d/xdebug.ini
+
+    
 # Permissions
-RUN find /var/www/html/ -exec chmod 555 {} \;
-RUN mkdir /var/www/html/wp-content/uploads && chmod 777 -R /var/www/html/wp-content/uploads
-RUN mkdir /var/www/html/wp-content/themes/cache && chmod 777 -R /var/www/html/wp-content/themes/cache
+RUN find /app/ -exec chmod 555 {} \;
+RUN mkdir /app/wp-content/uploads && chmod 777 -R /app/wp-content/uploads
+RUN mkdir /app/wp-content/themes/cache && chmod 777 -R /app/wp-content/themes/cache
 
 # Change DOCUMENT_ROOT
-ENV APACHE_DOCUMENT_ROOT /var/www/html/
+ENV APACHE_DOCUMENT_ROOT /app/
 RUN ls -al /etc/apache2/sites-available/
+
+COPY .docker/php.ini /usr/local/etc/php/php.ini
+COPY .docker/apache.conf /etc/apache2/sites-available/000-default.conf
 
 RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/*.conf
 RUN sed -ri -e 's!/var/www/!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/apache2.conf /etc/apache2/conf-available/*.conf
-COPY php.ini /usr/local/etc/php/php.ini
-COPY apache.conf /etc/apache2/sites-available/000-default.conf

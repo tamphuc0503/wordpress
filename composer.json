@@ -1,7 +1,6 @@
 {
     "require": {
-        "symfony/dotenv": "^5.4",
-        "bugsnag/bugsnag": "^3.28"
+        "symfony/dotenv": "^7.1"
     },
     "extra": {
         "preserve-paths": [

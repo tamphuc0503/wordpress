@@ -1,0 +1,17 @@
+FROM php:8.2-apache
+
+ARG PHP_VERSION=8.2
+ENV PHP_VERSION=$PHP_VERSION
+
+WORKDIR /app
+
+#rm -rf /var/lib/apt/lists/* \
+RUN apt-get update -y --quiet && apt-get install -y --quiet unzip nano git net-tools telnet \ 
+ && a2enmod rewrite && a2enmod headers \
+ && docker-php-ext-install mysqli opcache \
+ && curl -sS https://getcomposer.org/installer | php && mv composer.phar /usr/local/bin/composer
+
+# install php gd extension
+RUN apt-get install -y --quiet apt-utils libfreetype6-dev libjpeg62-turbo-dev libpng-dev && \
+    docker-php-ext-configure gd --with-freetype=/usr/include/ --with-jpeg=/usr/include/ && \
+    docker-php-ext-install gd

@@ -6,7 +6,7 @@ docker-compose.yaml
 .devcontainer
 .vscode
 ./vendor
-.docker
+.docker/Dockerfile*
 .dockerignore
 xmlrpc.php
 ./wp-content/uploads
